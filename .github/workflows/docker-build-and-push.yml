@@ -36,4 +36,3 @@ jobs:
     # Push the Docker image with the release version to GitHub Packages:
     - name: Push the Docker image with the release version to GitHub Packages
       run: docker push ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
-      
