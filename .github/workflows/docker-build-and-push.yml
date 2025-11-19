@@ -28,7 +28,7 @@ jobs:
 
     # Build the Docker image:
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ env.repo }}:latest .
+      run: docker build -f docker/Dockerfile -t ghcr.io/${{ env.repo }}:latest .
 
     # Push the Docker image to GitHub Packages:
     - name: Push Docker image to GitHub Packages
