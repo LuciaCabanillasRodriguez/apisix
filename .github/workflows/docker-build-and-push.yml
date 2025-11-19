@@ -12,6 +12,10 @@ jobs:
       contents: read
       packages: write
 
+    env:
+      ENV_APISIX_IMAGE_TAG_NAME: apisix
+      ENV_OS_ARCH: amd64
+
     steps:
     # Checkout the repository:
     - name: Checkout code
@@ -28,7 +32,15 @@ jobs:
 
     # Build the Docker image:
     - name: Build Docker image
-      run: docker build -f docker/debian-dev/Dockerfile -t ghcr.io/${{ env.repo }}:latest docker/debian-dev/
+      run: |
+          docker build \
+            -t ghcr.io/${{ env.repo }}:latest \
+            --build-arg TARGETARCH=${{ env.ENV_OS_ARCH }} \
+            --build-arg CODE_PATH=. \
+            --build-arg ENTRYPOINT_PATH=./docker/debian-dev/docker-entrypoint.sh \
+            --build-arg INSTALL_BROTLI=./docker/debian-dev/install-brotli.sh \
+            --build-arg CHECK_STANDALONE_CONFIG=./docker/utils/check_standalone_config.sh \
+            -f ./docker/debian-dev/Dockerfile ./docker/debian-dev/
 
     # Push the Docker image to GitHub Packages:
     - name: Push Docker image to GitHub Packages
